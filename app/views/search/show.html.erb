@@ -6,6 +6,6 @@
 <h2>Related Artists</h2>
 <ul>
 <% @related_artists.each do |artist| %>
-  <li>Name: <%= artist.name %>, Followers: <%= artist.followers["total"] %>, <%= link_to 'See related artists', request.parameters.merge({:q => artist.name }) %></li>
+  <li>Name: <%= artist.name %>, Followers: <%= artist.followers["total"] %>, <%= link_to 'See artist and related artists', request.parameters.merge({:q => artist.name }) %></li>
 <% end %>
 </ul>
