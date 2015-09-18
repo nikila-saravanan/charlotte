@@ -4,8 +4,9 @@ class SearchController < ApplicationController
   end
 
   def show
-    @artist = Search.for(params[:q])[0]
-# binding.pry
+    # binding.pry
+    sanitized_search = I18n.transliterate(params[:q]).gsub(/(\W|\d)/, " ")
+    @artist = Search.for(sanitized_search).first
     @related_artists = @artist.related_artists.sort_by {|artist| artist.followers["total"]}.reverse
   end
 end
