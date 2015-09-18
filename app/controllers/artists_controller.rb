@@ -1,6 +1,6 @@
 class ArtistsController < ApplicationController
   def show
+    @artist = RSpotify::Artist.search(params[:q])[0]
     # binding.pry
-    @artist = RSpotify::Artist.search(params[:q])
   end
 end
