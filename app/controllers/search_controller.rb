@@ -5,7 +5,7 @@ class SearchController < ApplicationController
 
   def show
     @artist = Search.for(params[:q])[0]
-    # binding.pry
+# binding.pry
     @related_artists = @artist.related_artists.sort_by {|artist| artist.followers["total"]}.reverse
   end
 end
