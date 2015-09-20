@@ -64,3 +64,4 @@ gem 'bootstrap-sass', '~> 3.1.1'
 gem 'devise'
 gem 'airbrake'
 gem 'rspotify'
+gem "d3-rails"

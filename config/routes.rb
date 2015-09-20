@@ -1,4 +1,11 @@
 Rails.application.routes.draw do
+  root 'search#index'
+  get '/search', to: 'search#show'
+  
+  get 'web', to: 'web#index'
+
+  get 'web/data', defaults: { format: 'json' }
+
   devise_for :users
   resources :genres
 
@@ -6,8 +13,6 @@ Rails.application.routes.draw do
 
   resources :users
 
-  root 'search#index'
-  get '/search', to: 'search#show'
 
   # The priority is based upon order of creation: first created -> highest priority.
   # See how all your routes lay out with "rake routes".
