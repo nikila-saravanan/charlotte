@@ -1,11 +1,12 @@
 Rails.application.routes.draw do
-  root 'search#index'
-  get '/search', to: 'search#show'
-  
+  root 'web#index'
+
+  get 'search', to: 'search#index'
+  get '/search/show', to: 'search#show'
 
   get 'web', to: 'web#index'
-
   get 'web/data', :defaults => { :format => 'js' }
+  get 'web/show', to: 'web#show'
 
   devise_for :users
   resources :genres

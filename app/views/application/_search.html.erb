@@ -1,0 +1,6 @@
+<%= form_tag(search_show_path, method: "get") do %>
+  <%= label_tag(:q, "Search for an Artist") %>
+  <%= text_field_tag(:q) %>
+   <%= submit_tag "Search", class: "btn btn-primary" %>
+  <!-- <a class="btn btn-primary" <%= submit_tag("Search") %> ></a> -->
+<% end %>
