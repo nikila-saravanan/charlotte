@@ -65,3 +65,4 @@ gem 'devise'
 gem 'airbrake'
 gem 'rspotify'
 gem "d3-rails"
+gem 'json'
