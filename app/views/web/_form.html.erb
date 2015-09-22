@@ -2,5 +2,11 @@
   <%= label_tag(:q, "Search for an Artist") %>
   <%= text_field_tag(:q) %>
    <%= submit_tag "Search", class: "btn btn-primary" %>
-  <!-- <a class="btn btn-primary" <%= submit_tag("Search") %> ></a> -->
 <% end %>
+
+<div class="menu">
+  <form>
+    <label><input type="radio" name="mode" value="size"> Prioritized</label>
+    <label><input type="radio" name="mode" value="count" checked> All Artists</label>
+  </form>
+</div>

@@ -1,122 +1,157 @@
-var width = 960,
-    height = 700,
-    radius = Math.min(width, height) / 2;
+(function() {
 
-var x = d3.scale.linear()
-    .range([0, 2 * Math.PI]);
+  var width = 960,
+      height = 700,
+      radius = Math.min(width, height) / 2;
 
-var y = d3.scale.sqrt()
-    .range([0, radius]);
+  var x = d3.scale.linear()
+      .range([0, 2 * Math.PI]);
 
-var color = d3.scale.category20c();
+  var y = d3.scale.sqrt()
+      .range([0, radius]);
 
-// remove previous chart to avoid duplication
-d3.select(".chart").selectAll("svg").remove();
+  var color = d3.scale.category20c();
 
-var svg = d3.select(".chart").append("svg")
-    .attr("width", width)
-    .attr("height", height)
-  .append("g")
-    .attr("transform", "translate(" + width / 2 + "," + (height / 2 + 10) + ")");
-
-var partition = d3.layout.partition()
-    .sort(null)
-    .value(function(d) {
-      return 1; });
-
-var arc = d3.svg.arc()
-    .startAngle(function(d) { return Math.max(0, Math.min(2 * Math.PI, x(d.x))); })
-    .endAngle(function(d) { return Math.max(0, Math.min(2 * Math.PI, x(d.x + d.dx))); })
-    .innerRadius(function(d) { return Math.max(0, y(d.y)); })
-    .outerRadius(function(d) { return Math.max(0, y(d.y + d.dy)); });
-
-// Keep track of the node that is currently being displayed as the root.
-var artist = <%= @artist.to_json.html_safe %>;
-    artist.children = artist.related_artists;
-    delete artist.related_artists;
-
-    artist.children.forEach(function(child){
-      child.children = child.related_artists;
-      delete child.related_artists;
-    })
+  // remove previous chart to avoid duplication
+  d3.select("#chart").selectAll("svg").remove();
 
 
-var node;
-var root = artist;
-node = root;
-// debugger
+  // make responsive
+  var responsivefy = function (svg) {
+      // get container + svg aspect ratio
+      var container = d3.select(svg.node().parentNode),
+          width = parseInt(svg.style("width")),
+          height = parseInt(svg.style("height")),
+          aspect = width / height;
+          debugger;
 
-var path = svg.datum(root).selectAll("path")
-    .data(partition.nodes)
-    .enter().append("path")
-    .attr("d", arc)
-    .style("fill", function(d) {
-      return color((d.children ? d : d.parent).name); })
-    .on("click", click)
-    .each(stash);
+      // add viewBox and preserveAspectRatio properties,
+      // and call resize so that svg resizes on inital page load
+      svg.attr("viewBox", "0 0 960 750")
+          .attr("perserveAspectRatio", "xMinYMid")
+          .call(resize);
 
-d3.selectAll("input").on("change", function change() {
-  var value = this.value === "count"
-      ? function() { return 1; }
-      : function(d) { return d.followers.total};
+      // to register multiple listeners for same event type,
+      // you need to add namespace, i.e., 'click.foo'
+      // necessary if you call invoke this function for multiple svgs
+      // api docs: https://github.com/mbostock/d3/wiki/Selections#on
+      d3.select(window).on("resize." + container.attr("id"), resize);
 
-  path
-      .data(partition.value(value).nodes)
-    .transition()
+      // get width of container and resize svg to fit it
+      function resize() {
+          var targetWidth = parseInt(container.style("width"));
+          svg.attr("width", targetWidth);
+          svg.attr("height", Math.round(targetWidth / aspect));
+      }
+  }
+
+  var svg = d3.select("#chart").append("svg")
+      .attr("viewBox", "0 0 960 750")
+      .attr("width", width)
+      .attr("height", height)
+      .call(responsivefy)
+    .append("g")
+      .attr("transform", "translate(" + width / 2 + "," + (height / 2 + 10) + ")");
+
+      debugger;
+
+  var partition = d3.layout.partition()
+      .sort(null)
+      .value(function(d) {
+        return 1; });
+
+  var arc = d3.svg.arc()
+      .startAngle(function(d) { return Math.max(0, Math.min(2 * Math.PI, x(d.x))); })
+      .endAngle(function(d) { return Math.max(0, Math.min(2 * Math.PI, x(d.x + d.dx))); })
+      .innerRadius(function(d) { return Math.max(0, y(d.y)); })
+      .outerRadius(function(d) { return Math.max(0, y(d.y + d.dy)); });
+
+  // Keep track of the node that is currently being displayed as the root.
+  var artist = <%= @artist.to_json.html_safe %>;
+      artist.children = artist.related_artists;
+      delete artist.related_artists;
+
+      artist.children.forEach(function(child){
+        child.children = child.related_artists;
+        delete child.related_artists;
+      })
+
+
+  var node;
+  var root = artist;
+  node = root;
+
+  var path = svg.datum(root).selectAll("path")
+      .data(partition.nodes)
+      .enter().append("path")
+      .attr("d", arc)
+      .style("fill", function(d) {
+        return color((d.children ? d : d.parent).name); })
+      .on("click", click)
+      .each(stash);
+
+  d3.selectAll("input").on("change", function change() {
+    var value = this.value === "count"
+        ? function() { return 1; }
+        : function(d) { return d.followers.total};
+
+    path
+        .data(partition.value(value).nodes)
+      .transition()
+        .duration(1000)
+        .attrTween("d", arcTweenData);
+  });
+
+  function click(d) {
+    node = d;
+    path.transition()
       .duration(1000)
-      .attrTween("d", arcTweenData);
-});
-
-function click(d) {
-  node = d;
-  path.transition()
-    .duration(1000)
-    .attrTween("d", arcTweenZoom(d));
-}
-
-d3.select(self.frameElement).style("height", height + "px");
-
-// Setup for switching data: stash the old values for transition.
-function stash(d) {
-  d.x0 = d.x;
-  d.dx0 = d.dx;
-}
-
-// When switching data: interpolate the arcs in data space.
-function arcTweenData(a, i) {
-  var oi = d3.interpolate({x: a.x0, dx: a.dx0}, a);
-  function tween(t) {
-    var b = oi(t);
-    a.x0 = b.x;
-    a.dx0 = b.dx;
-    return arc(b);
+      .attrTween("d", arcTweenZoom(d));
   }
-  if (i == 0) {
-   // If we are on the first arc, adjust the x domain to match the root node
-   // at the current zoom level. (We only need to do this once.)
-    var xd = d3.interpolate(x.domain(), [node.x, node.x + node.dx]);
-    return function(t) {
-      x.domain(xd(t));
-      return tween(t);
+
+  d3.select(self.frameElement).style("height", height + "px");
+
+  // Setup for switching data: stash the old values for transition.
+  function stash(d) {
+    d.x0 = d.x;
+    d.dx0 = d.dx;
+  }
+
+  // When switching data: interpolate the arcs in data space.
+  function arcTweenData(a, i) {
+    var oi = d3.interpolate({x: a.x0, dx: a.dx0}, a);
+    function tween(t) {
+      var b = oi(t);
+      a.x0 = b.x;
+      a.dx0 = b.dx;
+      return arc(b);
+    }
+    if (i == 0) {
+     // If we are on the first arc, adjust the x domain to match the root node
+     // at the current zoom level. (We only need to do this once.)
+      var xd = d3.interpolate(x.domain(), [node.x, node.x + node.dx]);
+      return function(t) {
+        x.domain(xd(t));
+        return tween(t);
+      };
+    } else {
+      return tween;
+    }
+  }
+
+  // When zooming: interpolate the scales.
+  function arcTweenZoom(d) {
+    var xd = d3.interpolate(x.domain(), [d.x, d.x + d.dx]),
+        yd = d3.interpolate(y.domain(), [d.y, 1]),
+        yr = d3.interpolate(y.range(), [d.y ? 20 : 0, radius]);
+    return function(d, i) {
+      return i
+          ? function(t) { return arc(d); }
+          : function(t) { x.domain(xd(t)); y.domain(yd(t)).range(yr(t)); return arc(d); };
     };
-  } else {
-    return tween;
   }
-}
 
-// When zooming: interpolate the scales.
-function arcTweenZoom(d) {
-  var xd = d3.interpolate(x.domain(), [d.x, d.x + d.dx]),
-      yd = d3.interpolate(y.domain(), [d.y, 1]),
-      yr = d3.interpolate(y.range(), [d.y ? 20 : 0, radius]);
-  return function(d, i) {
-    return i
-        ? function(t) { return arc(d); }
-        : function(t) { x.domain(xd(t)); y.domain(yd(t)).range(yr(t)); return arc(d); };
-  };
-}
-
-
-function error() {
-    console.log("error")
-}
+  function error() {
+      console.log("error")
+  }
+})();
