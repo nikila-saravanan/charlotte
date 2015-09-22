@@ -12,9 +12,16 @@
 
   var color = d3.scale.category20c();
 
+
+  // add tips
+ var tip = d3.tip()
+    .attr('class', 'd3-tip')
+    .html(function(d) {
+      return d.name;
+  })
+
   // remove previous chart to avoid duplication
   d3.select("#chart").selectAll("svg").remove();
-
 
   // make responsive
   var responsivefy = function (svg) {
@@ -52,8 +59,7 @@
       .call(responsivefy)
     .append("g")
       .attr("transform", "translate(" + width / 2 + "," + (height / 2 + 10) + ")");
-
-      debugger;
+      .call(tip);
 
   var partition = d3.layout.partition()
       .sort(null)
@@ -67,15 +73,14 @@
       .outerRadius(function(d) { return Math.max(0, y(d.y + d.dy)); });
 
   // Keep track of the node that is currently being displayed as the root.
-  var artist = <%= @artist.to_json.html_safe %>;
-      artist.children = artist.related_artists;
-      delete artist.related_artists;
+  var d3Artist = <%= @artist.to_json.html_safe %>;
+      d3Artist.children = d3Artist.related_artists;
+      delete d3Artist.related_artists;
 
-      artist.children.forEach(function(child){
+      d3Artist.children.forEach(function(child){
         child.children = child.related_artists;
         delete child.related_artists;
       })
-
 
   var node;
   var root = artist;
@@ -88,6 +93,8 @@
       .style("fill", function(d) {
         return color((d.children ? d : d.parent).name); })
       .on("click", click)
+      .on('mouseover', tip.show)
+      .on('mouseout', tip.hide)
       .each(stash);
 
   d3.selectAll("input").on("change", function change() {
