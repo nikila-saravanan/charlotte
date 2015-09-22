@@ -7,8 +7,8 @@ class WebController < ApplicationController
     @artist = Search.for(sanitized_search)[0]
     children_artists = @artist.related_artists
     grandchildren_artists = children_artists.map do |artist|
-                                artist.related_artists.delete_if {|artist| artist.name == @artist.name}
-                              end
+      artist.related_artists.delete_if {|artist| artist.name == @artist.name}
+    end
   end
 
   # def show
