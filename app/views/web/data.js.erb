@@ -28,8 +28,15 @@ var arc = d3.svg.arc()
     .outerRadius(function(d) { return Math.max(0, y(d.y + d.dy)); });
 
 // Keep track of the node that is currently being displayed as the root.
-var artist = <%= @artist.to_json.html_safe %>
-var children = artist.related_artists
+var artist = <%= @artist.to_json.html_safe %>;
+    artist.children = artist.related_artists;
+    delete artist.related_artists;
+
+    artist.children.forEach(function(child){
+      child.children = child.related_artists;
+      delete child.related_artists;
+    })
+
 
 var node;
 var root = artist;

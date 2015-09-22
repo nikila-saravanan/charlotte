@@ -5,9 +5,9 @@ class WebController < ApplicationController
   def data
     sanitized_search = I18n.transliterate(params[:q]).gsub(/(\W)/, " ")
     @artist = Search.for(sanitized_search)[0]
-    @children_artists = @artist.related_artists
-    @grandchildren_artists = @children_artists.map do |artist|
-                                artist.related_artists
+    children_artists = @artist.related_artists
+    grandchildren_artists = children_artists.map do |artist|
+                                artist.related_artists.delete_if {|artist| artist.name == @artist.name}
                               end
   end
 
