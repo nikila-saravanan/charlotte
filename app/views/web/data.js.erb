@@ -10,14 +10,21 @@ var y = d3.scale.sqrt()
 
 var color = d3.scale.category20c();
 
+var tip = d3.tip()
+  .attr('class', 'd3-tip')
+  .html(function(d) {
+    return d.name;
+})
+
 // remove previous chart to avoid duplication
 d3.select(".chart").selectAll("svg").remove();
 
 var svg = d3.select(".chart").append("svg")
     .attr("width", width)
     .attr("height", height)
-  .append("g")
-    .attr("transform", "translate(" + width / 2 + "," + (height / 2 + 10) + ")");
+   .append("g")
+    .attr("transform", "translate(" + width / 2 + "," + (height / 2 + 10) + ")")
+    .call(tip);
 
 var partition = d3.layout.partition()
     .sort(null)
@@ -30,12 +37,13 @@ var arc = d3.svg.arc()
     .innerRadius(function(d) { return Math.max(0, y(d.y)); })
     .outerRadius(function(d) { return Math.max(0, y(d.y + d.dy)); });
 
-// Keep track of the node that is currently being displayed as the root.
-var artist = <%= @artist.to_json.html_safe %>;
-    artist.children = artist.related_artists;
-    delete artist.related_artists;
 
-    artist.children.forEach(function(child){
+// Keep track of the node that is currently being displayed as the root.
+var d3Artist = <%= @artist.to_json.html_safe %>;
+    d3Artist.children = d3Artist.related_artists;
+    delete d3Artist.related_artists;
+
+    d3Artist.children.forEach(function(child){
       child.children = child.related_artists;
       delete child.related_artists;
     });
@@ -44,7 +52,7 @@ var artist = <%= @artist.to_json.html_safe %>;
 
 
 var node;
-var root = artist;
+var root = d3Artist;
 node = root;
 // debugger
 
@@ -52,9 +60,13 @@ var path = svg.datum(root).selectAll("path")
     .data(partition.nodes)
     .enter().append("path")
     .attr("d", arc)
+    .attr("name", function(d) {
+      return d.name; }) // add name of artist at node
     .style("fill", function(d) {
       return color((d.children ? d : d.parent).name); })
     .on("click", click)
+    .on('mouseover', tip.show)
+    .on('mouseout', tip.hide)
     .each(stash);
 
 d3.selectAll("input").on("change", function change() {
