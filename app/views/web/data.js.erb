@@ -38,7 +38,9 @@ var artist = <%= @artist.to_json.html_safe %>;
     artist.children.forEach(function(child){
       child.children = child.related_artists;
       delete child.related_artists;
-    })
+    });
+
+    debugger
 
 
 var node;
