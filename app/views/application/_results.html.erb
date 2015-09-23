@@ -1,13 +1,15 @@
 <% if @artist %>
-  <h1>Name: <%= @artist.name %>, Followers <%= @artist.followers["total"] %> </h1>
-  <h2><%= link_to 'See artist on Spotify', @artist.external_urls.values[0] %></h2>
+  <div id="content">
 
-  <h3><%= link_to 'Favorite this artist', new_artist_path(:artist_name => @artist.name, :artist_url => @artist.external_urls.values[0], :artist_followers => @artist.followers["total"])  %></h3>
-
-  <h2>Related Artists</h2>
-  <ul>
-  <% @artist.related_artists.each do |artist| %>
-    <li>Name: <%= artist.name %>, Followers: <%= artist.followers["total"] %>, <%= link_to 'See artist and related artists', request.parameters.merge({:q => artist.name}) %></li>
+  <div class="image-container"><img src="<%= @artist.images.find{ |img| img["height"] <= 400}["url"] %>"></img></div>
+  <h1>Artist: <%= @artist.name %></h1>
+  <h2>Followers: <%= number_with_delimiter(@artist.followers["total"], :delimiter => ',') %></h2>
+  <% unless @artist.genres.empty? %>
+    <h2>Genres: <%= @artist.genres.join(", ") %></h2>
   <% end %>
-  </ul>
+  <h3><%= link_to 'Favorite this artist', new_artist_path(:artist_name => @artist.name,
+  :artist_url => @artist.external_urls.values[0], :artist_followers => @artist.followers["total"])  %></h3>
+  <h3><%= link_to 'See artist on Spotify', @artist.external_urls.values[0] %></h3>
+
+  </div>
 <% end %>

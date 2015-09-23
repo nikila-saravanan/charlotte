@@ -80,6 +80,32 @@ input {
  margin-left: -17px;
 }
 
+.clearfix {
+  overflow: auto;
+}
+
+#results {
+  padding: 10px;
+  background: rgba(0, 0, 0, 0.3);
+  border-color: white;
+  border: 1px;
+  border-radius: 4px;
+}
+
+#results:empty {
+  display: none;
+}
+
+.image-container > img {
+  // max-height: 200px;
+  height: 100%;
+  width: 100%;
+}
+
+#content {
+  height: 75%;
+}
+
 .theme-dropdown .dropdown-menu {
   position: static;
   display: block;

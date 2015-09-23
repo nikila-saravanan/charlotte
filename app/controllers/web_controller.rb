@@ -1,12 +1,20 @@
 class WebController < ApplicationController
+  # protect_from_forgery except: :data
 
   def index
+    if params[:q]
+      search_param = CGI::escapeHTML(params[:q])
+      redirect_to ("/web/data?utf8=%E2%9C%93&q=#{search_param}&commit=Search")
+      return
+    end
+  end
+
+  def show
   end
 
   def data
     sanitized_search = I18n.transliterate(params[:q]).gsub(/(\W)/, " ")
     @artist = Search.for(sanitized_search)[0]
-
 
     if !@artist
       begin
@@ -23,7 +31,7 @@ class WebController < ApplicationController
           grandchild_artist.name == @artist.name || children_artists.any? {|a| a.name == grandchild_artist.name}
         end
       end
-
     end
+    # binding.pry
   end
 end
