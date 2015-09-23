@@ -1,4 +1,13 @@
-$("#results").html("<%= j render 'results' %>");
+function renderMenu() {
+  if ($("path").length > 0) {
+
+    $("#menu").html("<%= j render 'menu' %>");
+
+  };
+}
+
+  $("#results").html("<%= j render 'results' %>");
+  $("#flash").html("<%= j render 'layouts/flash_messages' %>");
 
 (function() {
 
@@ -70,6 +79,9 @@ $("#results").html("<%= j render 'results' %>");
       .attr("transform", "translate(" + width / 2 + "," + (height / 2 + 10) + ")")
       .call(tip);
 
+    setTimeout(renderMenu(), 5000);
+    // renderMenu()
+
   var partition = d3.layout.partition()
       .sort(null)
       .value(function(d) {
@@ -106,17 +118,17 @@ $("#results").html("<%= j render 'results' %>");
       .on('mouseout', tip.hide)
       .each(stash);
 
-  d3.selectAll("input").on("change", function change() {
-    var value = this.value === "count"
-        ? function() { return 1; }
-        : function(d) { return d.parent.followers.total};
-
-    path
-        .data(partition.value(value).nodes)
-      .transition()
-        .duration(1000)
-        .attrTween("d", arcTweenData);
-  });
+  // d3.selectAll("input").on("change", function change() {
+  //   var value = this.value === "count"
+  //       ? function() { return 1; }
+  //       : function(d) { return d.parent.followers.total};
+  //
+  //   path
+  //       .data(partition.value(value).nodes)
+  //     .transition()
+  //       .duration(1000)
+  //       .attrTween("d", arcTweenData);
+  // });
 
   function click(d) {
     node = d;
