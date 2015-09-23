@@ -1,7 +1,9 @@
+$("#results").html("<%= j render 'results' %>");
+
 (function() {
 
-  var width = 960,
-      height = 700,
+  var width = 760,
+      height = 500,
       radius = Math.min(width, height) / 2;
 
   var x = d3.scale.linear()
@@ -41,7 +43,7 @@
 
       // add viewBox and preserveAspectRatio properties,
       // and call resize so that svg resizes on inital page load
-      svg.attr("viewBox", "0 0 960 750")
+      svg.attr("viewBox", "0 0 760 550")
           .attr("perserveAspectRatio", "xMinYMid")
           .call(resize);
 
