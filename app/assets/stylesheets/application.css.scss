@@ -81,3 +81,14 @@ path {
  top: 100%;
  left: 0;
 }
+
+/* Add custom Font */
+@font-face {
+        font-family: "Little Flying Spiders";
+        src: url(LittleFlyingSpiders.ttf) format("truetype");
+    }
+
+#header {
+  font-family: "Little Flying Spiders";
+  font-size: 30px;
+}
