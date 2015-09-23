@@ -71,7 +71,7 @@
   var partition = d3.layout.partition()
       .sort(null)
       .value(function(d) {
-        return d.followers.total; });
+        return d.parent.followers.total; });
 
   var arc = d3.svg.arc()
       .startAngle(function(d) { return Math.max(0, Math.min(2 * Math.PI, x(d.x))); })
@@ -107,7 +107,7 @@
   d3.selectAll("input").on("change", function change() {
     var value = this.value === "count"
         ? function() { return 1; }
-        : function(d) { return d.followers.total};
+        : function(d) { return d.parent.followers.total};
 
     path
         .data(partition.value(value).nodes)
