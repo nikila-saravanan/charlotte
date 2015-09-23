@@ -1,13 +1,11 @@
 function renderMenu() {
   if ($("path").length > 0) {
-
     $("#menu").html("<%= j render 'menu' %>");
-
   };
 }
 
-  $("#results").html("<%= j render 'results' %>");
-  $("#flash").html("<%= j render 'layouts/flash_messages' %>");
+$("#results").html("<%= j render 'results' %>");
+$("#flash").html("<%= j render 'flash_messages' %>");
 
 (function() {
 
