@@ -12,7 +12,6 @@
 
   var color = d3.scale.category20c();
 
-
   // add tips
  var tip = d3.tip()
     .attr('class', 'd3-tip')
@@ -30,7 +29,6 @@
           width = parseInt(svg.style("width")),
           height = parseInt(svg.style("height")),
           aspect = width / height;
-          debugger;
 
       // add viewBox and preserveAspectRatio properties,
       // and call resize so that svg resizes on inital page load
@@ -58,7 +56,7 @@
       .attr("height", height)
       .call(responsivefy)
     .append("g")
-      .attr("transform", "translate(" + width / 2 + "," + (height / 2 + 10) + ")");
+      .attr("transform", "translate(" + width / 2 + "," + (height / 2 + 10) + ")")
       .call(tip);
 
   var partition = d3.layout.partition()
@@ -83,7 +81,7 @@
       })
 
   var node;
-  var root = D3Artist;
+  var root = d3Artist;
   node = root;
 
   var path = svg.datum(root).selectAll("path")

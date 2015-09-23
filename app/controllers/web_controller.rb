@@ -8,18 +8,10 @@ class WebController < ApplicationController
 
     children_artists = @artist.related_artists
 
-    grandchildren_artists = children_artists.map do |artist|
-      artist.related_artists.delete_if do |artist|
-        artist.name == @artist.name || children_artists.include?(artist)
+    grandchildren_artists = children_artists.map do |child_artist|
+      child_artist.related_artists.delete_if do |grandchild_artist|
+        grandchild_artist.name == @artist.name || children_artists.any? {|a| a.name == grandchild_artist.name}
       end
     end
   end
-
-  # def show
-  #   # replace non-ASCII characters with ASCII and non-word characters with spaces for API call
-  #   sanitized_search = I18n.transliterate(params[:q]).gsub(/(\W)/, " ")
-  #   @artist = Search.for(sanitized_search).first
-  #   @related_artists = @artist.related_artists.sort_by {|artist| artist.followers["total"]}.reverse
-  # end
-
 end
