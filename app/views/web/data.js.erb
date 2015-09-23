@@ -12,11 +12,20 @@
 
   var color = d3.scale.category20c();
 
+  // Followers with Commas
+  function followersWithCommas(x) {
+      return "<br /> <br />" + x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",") + " followers" ;
+  }
+  // Spotify URL
+  function spotifyUrl(x) {
+      return "<br /> <br />" + x;
+  }
+
   // add tips
  var tip = d3.tip()
     .attr('class', 'd3-tip')
     .html(function(d) {
-      return d.name;
+      return d.name + followersWithCommas(d.followers.total);
   })
 
   // remove previous chart to avoid duplication
