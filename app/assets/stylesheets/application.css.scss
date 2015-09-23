@@ -1,3 +1,6 @@
+// Custom Font
+@import url(https://fonts.googleapis.com/css?family=Raleway:100);
+
 /*
  * This is a manifest file that'll be compiled into application.css, which will include all the files
  * listed below.
@@ -19,10 +22,13 @@
  //= depend_on_asset "bootstrap/glyphicons-halflings-regular.svg"
  */
 @import "bootstrap";
+
 /* Some Style from the Bootstrap Default Theme */
 body {
   background-color: #263645;
   color: white;
+  font-family: 'Raleway', sans-serif;
+  font-weight: 100;
 }
 
 table {
@@ -64,8 +70,7 @@ input {
  color: white; /*Change active text color here*/
 }
 .navbar-default .navbar-brand {
- color: #ff8300; /*Change active text color here*/
- font-weight: bold;
+ color: #9ECAE1; /*Change active text color here*/
  font-size: 30px;
 }
 
@@ -116,15 +121,4 @@ path {
  margin: -1px 0 0 0;
  top: 100%;
  left: 0;
-}
-
-/* Add custom Font */
-@font-face {
-        font-family: "Little Flying Spiders";
-        src: url(LittleFlyingSpiders.ttf) format("truetype");
-    }
-
-#header {
-  font-family: "Little Flying Spiders";
-  font-size: 30px;
 }
