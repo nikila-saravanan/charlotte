@@ -21,8 +21,8 @@
 @import "bootstrap";
 /* Some Style from the Bootstrap Default Theme */
 body {
-  padding-left: 30px;
-  padding-right: 30px;
+  background-color: #263645;
+  color: white;
 }
 
 table {
@@ -31,6 +31,38 @@ table {
 
 td {
   padding: 10px;
+}
+
+@keyframes move {
+	0% {
+		background-position: 0 60%, 0 50%;
+	}
+	100% {
+	  background-position: 0 60%, 100% 50%;
+	}
+}
+
+.navbar {
+  background-color: #263645;
+	background-image: url('http://timteeling.com/dev/img/network.svg'), radial-gradient(200px 500px at center, #ff8300 0%, rgba(0,0,0,0) 50%, rgba(0,0,0,0));
+	background-size: 125%, 50% 100%;
+  background-position: 0 60%, 0 100%;
+  animation: move 5s linear infinite;
+  height: 100px;
+  /*box-shadow: inset 0 0 25px rgba(0,0,0,.5);*/
+  border: 2px solid #263645;
+  border-right: 0;
+  border-left: 0;
+  border-radius: 0;
+}
+
+.navbar-default .navbar-nav > li > a {
+ color: white; /*Change active text color here*/
+}
+.navbar-default .navbar-brand {
+ color: #ff8300; /*Change active text color here*/
+ font-weight: bold;
+ font-size: 30px;
 }
 
 .theme-dropdown .dropdown-menu {
