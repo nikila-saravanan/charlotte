@@ -1,0 +1,10 @@
+<% content_for :welcome_header do %>
+ <div class="welcome-header">
+   <%= render 'layouts/welcome_header' %>
+ </div>
+<% end %>
+ <div class="jumbotron center ">
+   <h1>Meet Charlotte</h1>
+   <h2>Find your new favorite artist.</h2>
+   <a type="button" class="btn btn-primary btn-lg hvr-ripple-out" id="welcome-button" src=<%= link_to  "Get started", web_path %></a>
+ </div>

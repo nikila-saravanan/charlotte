@@ -7,13 +7,8 @@
       <span class="icon-bar"></span>
       <span class="icon-bar"></span>
     </button>
-    <a class="navbar-brand" id="header" rel="home" href= <%=web_path %>>
-      CHARLOTTE
-    </a>
   </div>
-  <div class="navbar-form navbar-left" role="search">
-      <%= render 'form' %>
-  </div>  <!-- Collect the nav links, forms, and other content for toggling -->
+  <!-- Collect the nav links, forms, and other content for toggling -->
   <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
     <ul class="nav navbar-nav navbar-right">
     <% if user_signed_in? %>
@@ -25,5 +20,5 @@
       <li><%= link_to "Log in", new_user_session_path =%></li>
       <% end %>
     </ul>
-  </div><!-- /.navbar-collapse -->
-</nav>
+  </div>
+  </nav>

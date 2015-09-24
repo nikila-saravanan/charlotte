@@ -12,6 +12,9 @@ class WebController < ApplicationController
   def show
   end
 
+  def welcome
+  end
+
   def data
     sanitized_search = I18n.transliterate(params[:q]).gsub(/(\W)/, " ")
     @artist = Search.for(sanitized_search)[0]

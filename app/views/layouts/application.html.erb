@@ -9,7 +9,11 @@
 </head>
 <body>
 
-<%= render 'layouts/header' %>
+<% if content_for?(:welcome_header) %>
+<%= yield(:welcome_header) %>
+<% else %>
+<%= render :partial => "layouts/header" %>
+<% end %>
 <%= render 'flash_messages' %>
 <%= yield %>
 
