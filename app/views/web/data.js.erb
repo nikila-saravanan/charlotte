@@ -14,6 +14,12 @@ function displayJs(node) {
   }
 }
 
+function displayForm(){
+  if($("#chart").html.length > 0){
+    $("#form-ul").html("<%= j render 'form' %>");
+    $("#form-c").remove();
+  }
+}
 
 $("#flash").html("<%= j render 'flash_messages' %>");
 
@@ -192,3 +198,4 @@ function displayResults(node) {
 }
 
 displayResults(node);
+displayForm();
