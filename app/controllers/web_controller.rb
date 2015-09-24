@@ -35,6 +35,8 @@ class WebController < ApplicationController
         end
       end
     end
-    # binding.pry
   end
+end
+
+class SearchError < StandardError
 end
