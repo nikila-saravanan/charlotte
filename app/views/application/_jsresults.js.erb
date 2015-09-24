@@ -1,0 +1,18 @@
+function displayJs(node) {
+  if (node) {
+    var name = node.name,
+    followers = node.followers["total"],
+    genres = node.genres,
+    url = node.external_urls.values[0],
+    id = node.id;
+
+    if (genres.length > 0){
+    return '<div id="content"><h1>Artist:'+ node.name +
+    '</h1><h2>Followers: ' + followers["total"] +'</h2>' +
+    '<h2>Genres: '+ node.followers["total"] +'</h2>' +
+    '<h3><%= link_to "Favorite this artist", new_artist_path(:artist_name => @artist.name,:artist_url => @artist.external_urls.values[0], :artist_followers => @artist.followers["total"])  %></h3>'
+
+    '</div>'
+
+  }
+}
