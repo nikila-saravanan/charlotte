@@ -14,5 +14,6 @@
 //= require jquery_ujs
 //= require d3
 //= require bootstrap
+//= require jquery.bootstrap-autohidingnavbar
 //= require_tree ../../../vendor/assets/javascripts/.
 //= require_tree .

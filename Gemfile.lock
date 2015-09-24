@@ -47,6 +47,8 @@ GEM
       rack (>= 0.9.0)
     binding_of_caller (0.7.2)
       debug_inspector (>= 0.0.1)
+    bootstrap-autohidingnavbar-rails (1.0.0)
+      railties (>= 3.1)
     bootstrap-sass (3.1.1.1)
       sass (~> 3.2)
     builder (3.2.2)
@@ -296,6 +298,7 @@ DEPENDENCIES
   airbrake
   better_errors
   binding_of_caller
+  bootstrap-autohidingnavbar-rails
   bootstrap-sass (~> 3.1.1)
   byebug
   capybara

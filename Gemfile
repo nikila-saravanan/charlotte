@@ -66,3 +66,4 @@ gem 'airbrake'
 gem 'rspotify'
 gem "d3-rails"
 gem 'json'
+gem 'bootstrap-autohidingnavbar-rails'
