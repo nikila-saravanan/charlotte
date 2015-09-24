@@ -12,11 +12,7 @@
     </a>
   </div>
   <div class="navbar-form navbar-left" role="search">
-    <% if !current_page?(controller: 'web', action: 'index') %>
-      <%= render 'favorites_form' %>
-    <% else %>
       <%= render 'form' %>
-    <% end %>
   </div>
   <!-- Collect the nav links, forms, and other content for toggling -->
   <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
