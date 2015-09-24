@@ -10,6 +10,7 @@
   <h3><%= link_to 'Favorite this artist', new_artist_path(:artist_name => @artist.name,
   :artist_url => @artist.external_urls.values[0], :artist_followers => @artist.followers["total"])  %></h3>
   <h3><%= link_to 'See artist on Spotify', @artist.external_urls.values[0] %></h3>
+  <iframe src="https://embed.spotify.com/?uri=spotify%3Aartist%3A<%=@artist.id %>" width="300" height="380" frameborder="0" allowtransparency="true"></iframe>
 
   </div>
 <% end %>
