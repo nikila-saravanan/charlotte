@@ -4,5 +4,12 @@
   <h2>Search for an Artist</h2>
   <%= render 'form_center' %>
 </div>
+<div class="spinner">
+  <script>
+    $("#form-c").submit(function(event){
+      $(".spinner").spin();
+    });
+  </script>
+</div>
 <%= render 'chart' %>
 <div class="col-md-3 clearfix centerfy" id="results"></div>

@@ -1,9 +1,3 @@
-function renderMenu() {
-  if ($("path").length > 0) {
-    $("#menu").html("<%= j render 'menu' %>");
-  };
-}
-
 $("#flash").html("<%= j render 'flash_messages' %>");
 
 function displayJs(node) {
@@ -44,6 +38,7 @@ function displayForm(){
   if($("#chart").html.length > 0){
     $("#form-ul").html("<%= j render 'form' %>");
     $("#form-c").remove();
+    $(".spinner").remove();
   }
 }
 
@@ -114,9 +109,6 @@ var svg = d3.select("#chart").append("svg")
   .append("g")
     .attr("transform", "translate(" + width / 2 + "," + (height / 2 + 10) + ")")
     .call(tip);
-
-  setTimeout(renderMenu(), 5000);
-  // renderMenu()
 
 var partition = d3.layout.partition()
     .sort(function descending(a, b) {
@@ -219,7 +211,6 @@ function error() {
 function displayResults(node) {
   $("#results").html(displayJs(node));
 }
-
 
 displayForm();
 displayResults(node);
