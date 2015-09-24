@@ -40,11 +40,13 @@ body {
   font-size: 1.5em;
 }
 
-// .btn {
-//   background: #9ECAE1;
-//   color: white;
-//   font-weight: bold;
-// }
+a:hover {
+  color: white;
+}
+
+a {
+  color: #9ECAE1;
+}
 
 table {
   width: 100%;
@@ -149,7 +151,7 @@ input {
   margin-top: 4%;
   border-radius: 4px;
   border: 1px;
-  border-style: solid; 
+  border-style: solid;
   border-color: #9ECAE1;
 }
 
