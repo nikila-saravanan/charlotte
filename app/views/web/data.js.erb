@@ -7,7 +7,6 @@ function renderMenu() {
 $("#results").html("<%= j render 'results' %>");
 $("#flash").html("<%= j render 'flash_messages' %>");
 
-(function() {
 
   var width = 760,
       height = 500,
@@ -16,7 +15,7 @@ $("#flash").html("<%= j render 'flash_messages' %>");
   var x = d3.scale.linear()
       .range([0, 2 * Math.PI]);
 
-  var y = d3.scale.sqrt()
+  var y = d3.scale.linear()
       .range([0, radius]);
 
   var color = d3.scale.category20c();
@@ -81,9 +80,17 @@ $("#flash").html("<%= j render 'flash_messages' %>");
     // renderMenu()
 
   var partition = d3.layout.partition()
-      .sort(null)
+      .sort(function descending(a, b) {
+        return b.followers.total < a.followers.total
+            ? -1
+            : b.followers.total > a.followers.total
+                ? 1
+                : b.followers.total >= a.followers.total
+                    ? 0
+                    : NaN;
+      })
       .value(function(d) {
-        return d.parent.followers.total; });
+        return d.parent.followers.total/Math.max(1, d.parent.children.length); });
 
   var arc = d3.svg.arc()
       .startAngle(function(d) { return Math.max(0, Math.min(2 * Math.PI, x(d.x))); })
@@ -107,7 +114,7 @@ $("#flash").html("<%= j render 'flash_messages' %>");
 
   var path = svg.datum(root).selectAll("path")
       .data(partition.nodes)
-      .enter().append("path")
+    .enter().append("path")
       .attr("d", arc)
       .style("fill", function(d) {
         return color((d.children ? d : d.parent).name); })
@@ -115,18 +122,6 @@ $("#flash").html("<%= j render 'flash_messages' %>");
       .on('mouseover', tip.show)
       .on('mouseout', tip.hide)
       .each(stash);
-
-  // d3.selectAll("input").on("change", function change() {
-  //   var value = this.value === "count"
-  //       ? function() { return 1; }
-  //       : function(d) { return d.parent.followers.total};
-  //
-  //   path
-  //       .data(partition.value(value).nodes)
-  //     .transition()
-  //       .duration(1000)
-  //       .attrTween("d", arcTweenData);
-  // });
 
   function click(d) {
     node = d;
@@ -180,4 +175,3 @@ $("#flash").html("<%= j render 'flash_messages' %>");
   function error() {
       console.log("error")
   }
-})();
