@@ -1,201 +1,216 @@
-function renderMenu() {
-  if ($("path").length > 0) {
-    $("#menu").html("<%= j render 'menu' %>");
-  };
-}
+$("#flash").html("<%= j render 'flash_messages' %>");
 
 function displayJs(node) {
   if (node) {
     if (node.genres.length > 0){
-    return '<div id="content"><h1>Artist: '+ node.name +'</h1><h2>Followers: '+ node.followers["total"] +'</h2></div><h2>Genres: '+ node.genres +'</h2><h3><%= (link_to "Favorite this artist", new_artist_path(:artist_name => @artist.name,:artist_url => @artist.external_urls.values[0], :artist_followers => @artist.followers["total"])) if @artist  %></h3></div>';
+      var template =  `<div id="content">
+                          <img src="${node.images[0].url}">
+                          <h1>${node.name}</h1>
+                          <h4>Followers: ${node.followers["total"]}</h4>
+                          <h4>Genres: ${node.genres}</h4>
+                          <h4><a href="artists/new?artist_followers=${node.followers["total"]}&artist_name=${(node.name.replace(/\s/g,"+"))}&artist_url=${node.external_urls.spotify}">Favorite This Artist</a></h4>
+                          <iframe src="https://embed.spotify.com/?uri=spotify%3Aartist%3A${node.id}" width="100%" height="100%" frameborder="0" allowtransparency="true"></iframe>
+                        </div>`
+      return template;
+      respondify();
     } else {
-    return '<div id="content"><h1>Artist: '+ node.name +'</h1><h2>Followers: '+ node.followers["total"] + '<h3><%= (link_to "Favorite this artist", new_artist_path(:artist_name => @artist.name,:artist_url => @artist.external_urls.values[0], :artist_followers => @artist.followers["total"])) if @artist %></h3></div>';
+      var template = `<div id="content">
+                          <img src="${node.images[0].url}">
+                          <h1>Artist:${node.name}</h1>
+                          <h4>Followers: ${node.followers["total"]}</h4>
+                          <h4><a href="artists/new?artist_followers=${node.followers["total"]}&artist_name=${(node.name.replace(/\s/g,"+"))}&artist_url=${node.external_urls.spotify}">Favorite This Artist</a></h4>
+                          <iframe src="https://embed.spotify.com/?uri=spotify%3Aartist%3A${node.id}" width="300" height="380" frameborder="0" allowtransparency="true"></iframe>
+                        </div>`
+      return template;
+      respondify();
     }
   }
 }
+
+function respondify(){
+  $('iframe[src*="embed.spotify.com"]').each( function() {
+    $(this).css('width',$(this).parent(1).css('width'));
+    $(this).attr('src',$(this).attr('src'));
+  });
+};
 
 function displayForm(){
   if($("#chart").html.length > 0){
     $("#form-ul").html("<%= j render 'form' %>");
     $("#form-c").remove();
+    $(".spinner").remove();
   }
 }
 
-$("#flash").html("<%= j render 'flash_messages' %>");
+var width = 760,
+    height = 500,
+    radius = Math.min(width, height) / 2;
 
+var x = d3.scale.linear()
+    .range([0, 2 * Math.PI]);
 
-  var width = 760,
-      height = 500,
-      radius = Math.min(width, height) / 2;
+var y = d3.scale.linear()
+    .range([0, radius]);
 
-  var x = d3.scale.linear()
-      .range([0, 2 * Math.PI]);
+var color = d3.scale.category20c();
 
-  var y = d3.scale.linear()
-      .range([0, radius]);
+// Followers with Commas
+function followersWithCommas(x) {
+    return "<br /> <br />" + x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",") + " followers" ;
+}
+// Spotify URL
+function spotifyUrl(x) {
+    return "<br /> <br />" + x;
+}
 
-  var color = d3.scale.category20c();
+// add tips
+var tip = d3.tip()
+  .attr('class', 'd3-tip')
+  .html(function(d) {
+    return d.name + followersWithCommas(d.followers.total);
+})
 
-  // Followers with Commas
-  function followersWithCommas(x) {
-      return "<br /> <br />" + x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",") + " followers" ;
-  }
-  // Spotify URL
-  function spotifyUrl(x) {
-      return "<br /> <br />" + x;
-  }
+// remove previous chart to avoid duplication
+d3.select("#chart").selectAll("svg").remove();
 
-  // add tips
- var tip = d3.tip()
-    .attr('class', 'd3-tip')
-    .html(function(d) {
-      return d.name + followersWithCommas(d.followers.total);
-  })
+// make responsive
+var responsivefy = function (svg) {
+    // get container + svg aspect ratio
+    var container = d3.select(svg.node().parentNode),
+        width = parseInt(svg.style("width")),
+        height = parseInt(svg.style("height")),
+        aspect = width / height;
 
-  // remove previous chart to avoid duplication
-  d3.select("#chart").selectAll("svg").remove();
+    // add viewBox and preserveAspectRatio properties,
+    // and call resize so that svg resizes on inital page load
+    svg.attr("viewBox", "0 0 760 550")
+        .attr("perserveAspectRatio", "xMinYMid")
+        .call(resize);
 
-  // make responsive
-  var responsivefy = function (svg) {
-      // get container + svg aspect ratio
-      var container = d3.select(svg.node().parentNode),
-          width = parseInt(svg.style("width")),
-          height = parseInt(svg.style("height")),
-          aspect = width / height;
+    // to register multiple listeners for same event type,
+    // you need to add namespace, i.e., 'click.foo'
+    // necessary if you call invoke this function for multiple svgs
+    // api docs: https://github.com/mbostock/d3/wiki/Selections#on
+    d3.select(window).on("resize." + container.attr("id"), resize);
 
-      // add viewBox and preserveAspectRatio properties,
-      // and call resize so that svg resizes on inital page load
-      svg.attr("viewBox", "0 0 760 550")
-          .attr("perserveAspectRatio", "xMinYMid")
-          .call(resize);
-
-      // to register multiple listeners for same event type,
-      // you need to add namespace, i.e., 'click.foo'
-      // necessary if you call invoke this function for multiple svgs
-      // api docs: https://github.com/mbostock/d3/wiki/Selections#on
-      d3.select(window).on("resize." + container.attr("id"), resize);
-
-      // get width of container and resize svg to fit it
-      function resize() {
-          var targetWidth = parseInt(container.style("width"));
-          svg.attr("width", targetWidth);
-          svg.attr("height", Math.round(targetWidth / aspect));
-      }
-  }
-
-  var svg = d3.select("#chart").append("svg")
-      .attr("viewBox", "0 0 960 750")
-      .attr("width", width)
-      .attr("height", height)
-      .call(responsivefy)
-    .append("g")
-      .attr("transform", "translate(" + width / 2 + "," + (height / 2 + 10) + ")")
-      .call(tip);
-
-    setTimeout(renderMenu(), 5000);
-    // renderMenu()
-
-  var partition = d3.layout.partition()
-      .sort(function descending(a, b) {
-        return b.followers.total < a.followers.total
-            ? -1
-            : b.followers.total > a.followers.total
-                ? 1
-                : b.followers.total >= a.followers.total
-                    ? 0
-                    : NaN;
-      })
-      .value(function(d) {
-        return d.parent.followers.total/Math.max(1, d.parent.children.length); });
-
-  var arc = d3.svg.arc()
-      .startAngle(function(d) { return Math.max(0, Math.min(2 * Math.PI, x(d.x))); })
-      .endAngle(function(d) { return Math.max(0, Math.min(2 * Math.PI, x(d.x + d.dx))); })
-      .innerRadius(function(d) { return Math.max(0, y(d.y)); })
-      .outerRadius(function(d) { return Math.max(0, y(d.y + d.dy)); });
-
-  // Keep track of the node that is currently being displayed as the root.
-  var d3Artist = <%= @artist.to_json.html_safe %>;
-      d3Artist.children = d3Artist.related_artists;
-      delete d3Artist.related_artists;
-
-      d3Artist.children.forEach(function(child){
-        child.children = child.related_artists;
-        delete child.related_artists;
-      })
-
-  var node;
-  var root = d3Artist;
-  node = root;
-
-  var path = svg.datum(root).selectAll("path")
-      .data(partition.nodes)
-    .enter().append("path")
-      .attr("d", arc)
-      .style("fill", function(d) {
-        return color((d.children ? d : d.parent).name); })
-      .on("click", click)
-      .on('mouseover', tip.show)
-      .on('mouseout', tip.hide)
-      .each(stash);
-
-  function click(d) {
-    node = d;
-    displayResults(node);
-    path.transition()
-      .duration(1000)
-      .attrTween("d", arcTweenZoom(d));
-  }
-
-  d3.select(self.frameElement).style("height", height + "px");
-
-  // Setup for switching data: stash the old values for transition.
-  function stash(d) {
-    d.x0 = d.x;
-    d.dx0 = d.dx;
-  }
-
-  // When switching data: interpolate the arcs in data space.
-  function arcTweenData(a, i) {
-    var oi = d3.interpolate({x: a.x0, dx: a.dx0}, a);
-    function tween(t) {
-      var b = oi(t);
-      a.x0 = b.x;
-      a.dx0 = b.dx;
-      return arc(b);
+    // get width of container and resize svg to fit it
+    function resize() {
+        var targetWidth = parseInt(container.style("width"));
+        svg.attr("width", targetWidth);
+        svg.attr("height", Math.round(targetWidth / aspect));
     }
-    if (i == 0) {
-     // If we are on the first arc, adjust the x domain to match the root node
-     // at the current zoom level. (We only need to do this once.)
-      var xd = d3.interpolate(x.domain(), [node.x, node.x + node.dx]);
-      return function(t) {
-        x.domain(xd(t));
-        return tween(t);
-      };
-    } else {
-      return tween;
-    }
-  }
+}
 
-  // When zooming: interpolate the scales.
-  function arcTweenZoom(d) {
-    var xd = d3.interpolate(x.domain(), [d.x, d.x + d.dx]),
-        yd = d3.interpolate(y.domain(), [d.y, 1]),
-        yr = d3.interpolate(y.range(), [d.y ? 20 : 0, radius]);
-    return function(d, i) {
-      return i
-          ? function(t) { return arc(d); }
-          : function(t) { x.domain(xd(t)); y.domain(yd(t)).range(yr(t)); return arc(d); };
+var svg = d3.select("#chart").append("svg")
+    .attr("viewBox", "0 0 960 750")
+    .attr("width", width)
+    .attr("height", height)
+    .call(responsivefy)
+  .append("g")
+    .attr("transform", "translate(" + width / 2 + "," + (height / 2 + 10) + ")")
+    .call(tip);
+
+var partition = d3.layout.partition()
+    .sort(function descending(a, b) {
+      return b.followers.total < a.followers.total
+          ? -1
+          : b.followers.total > a.followers.total
+              ? 1
+              : b.followers.total >= a.followers.total
+                  ? 0
+                  : NaN;
+    })
+    .value(function(d) {
+      return d.parent.followers.total/Math.max(1, d.parent.children.length); });
+
+var arc = d3.svg.arc()
+    .startAngle(function(d) { return Math.max(0, Math.min(2 * Math.PI, x(d.x))); })
+    .endAngle(function(d) { return Math.max(0, Math.min(2 * Math.PI, x(d.x + d.dx))); })
+    .innerRadius(function(d) { return Math.max(0, y(d.y)); })
+    .outerRadius(function(d) { return Math.max(0, y(d.y + d.dy)); });
+
+// Keep track of the node that is currently being displayed as the root.
+var d3Artist = <%= @artist.to_json.html_safe %>;
+    d3Artist.children = d3Artist.related_artists;
+    delete d3Artist.related_artists;
+
+    d3Artist.children.forEach(function(child){
+      child.children = child.related_artists;
+      delete child.related_artists;
+    })
+
+var node;
+var root = d3Artist;
+node = root;
+
+var path = svg.datum(root).selectAll("path")
+    .data(partition.nodes)
+  .enter().append("path")
+    .attr("d", arc)
+    .style("fill", function(d) {
+      return color((d.children ? d : d.parent).name); })
+    .on("click", click)
+    .on('mouseover', tip.show)
+    .on('mouseout', tip.hide)
+    .each(stash);
+
+function click(d) {
+  node = d;
+  displayResults(node);
+  path.transition()
+    .duration(1000)
+    .attrTween("d", arcTweenZoom(d));
+}
+
+d3.select(self.frameElement).style("height", height + "px");
+
+// Setup for switching data: stash the old values for transition.
+function stash(d) {
+  d.x0 = d.x;
+  d.dx0 = d.dx;
+}
+
+// When switching data: interpolate the arcs in data space.
+function arcTweenData(a, i) {
+  var oi = d3.interpolate({x: a.x0, dx: a.dx0}, a);
+  function tween(t) {
+    var b = oi(t);
+    a.x0 = b.x;
+    a.dx0 = b.dx;
+    return arc(b);
+  }
+  if (i == 0) {
+   // If we are on the first arc, adjust the x domain to match the root node
+   // at the current zoom level. (We only need to do this once.)
+    var xd = d3.interpolate(x.domain(), [node.x, node.x + node.dx]);
+    return function(t) {
+      x.domain(xd(t));
+      return tween(t);
     };
+  } else {
+    return tween;
   }
+}
 
-  function error() {
-      console.log("error")
-  }
+// When zooming: interpolate the scales.
+function arcTweenZoom(d) {
+  var xd = d3.interpolate(x.domain(), [d.x, d.x + d.dx]),
+      yd = d3.interpolate(y.domain(), [d.y, 1]),
+      yr = d3.interpolate(y.range(), [d.y ? 20 : 0, radius]);
+  return function(d, i) {
+    return i
+        ? function(t) { return arc(d); }
+        : function(t) { x.domain(xd(t)); y.domain(yd(t)).range(yr(t)); return arc(d); };
+  };
+}
+
+function error() {
+    console.log("error")
+}
 
 function displayResults(node) {
   $("#results").html(displayJs(node));
 }
 
-displayResults(node);
 displayForm();
+displayResults(node);
