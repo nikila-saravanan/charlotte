@@ -5,8 +5,8 @@ function displayJs(node) {
     if (node.genres.length > 0){
       var template =  "<div id='content'>" +
                           "<img src=" + node.images[0].url + ">" +
-                          "<h1>" + node.name + "</h1>" +
-                          "<h4>Followers: " + node.followers.total + ".</h4>" +
+                          "<h1>Artist: " + node.name + "</h1>" +
+                          "<h4>Followers: " + node.followers.total + "</h4>" +
                           "<h4>Genres: " + node.genres + "</h4>" +
                           "<h4><a href='artists/new?artist_followers=" + node.followers.total + "&artist_name=" + node.name.replace(/\s/g,"+") + "&artist_url=" + node.external_urls.spotify + "'>Favorite This Artist</a></h4>" +
                           "<iframe src='https://embed.spotify.com/?uri=spotify%3Aartist%3A" + node.id + "' width='100%' height='100%' frameborder='0' allowtransparency='true'></iframe>" +
@@ -16,7 +16,7 @@ function displayJs(node) {
     } else {
       var template = "<div id='content'>" +
                           "<img src='" + node.images[0].url + "'>" +
-                          "<h1>Artist:" + node.name + "</h1>" +
+                          "<h1>Artist: " + node.name + "</h1>" +
                           "<h4>Followers: " + node.followers.total + "</h4>" +
                           "<h4><a href='artists/new?artist_followers=" + node.followers.total + "&artist_name=" + node.name.replace(/\s/g,"+") + "&artist_url=" + node.external_urls.spotify + "'>Favorite This Artist</a></h4>" +
                           "<iframe src='https://embed.spotify.com/?uri=spotify%3Aartist%3A" + node.id + "' width='300' height='380' frameborder='0' allowtransparency='true'></iframe>" +
