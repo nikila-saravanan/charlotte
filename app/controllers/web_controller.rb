@@ -21,8 +21,10 @@ class WebController < ApplicationController
   def data
     sanitized_search = I18n.transliterate(params[:q]).gsub(/(\W)/, " ")
     @artist = Search.for(sanitized_search)[0]
+    @error = false
 
     if !@artist
+      @error = true
       begin
         raise SearchError
       rescue
