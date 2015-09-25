@@ -60,6 +60,10 @@ table {
    background-color: #263645;
  }
 
+ .table {
+   margin-bottom: 8%;
+ }
+
 td {
   padding: 10px;
 }
@@ -97,12 +101,9 @@ input {
 .navbar-fixed-bottom {
   clear: both;
   background: #263645 !important;
+  clear: both;
 }
 
-#chart {
-  height: 80%;
-  margin-top: 1%;
-}
 
 .field > input[type="email"], input[type="password"] {
   border-radius: 4px;
@@ -187,6 +188,14 @@ input {
   margin: 20px;
 }
 
+#chart {
+  height: 80%;
+  margin-top: 1%;
+  margin-bottom: 8%;
+  overflow-x: hidden;
+
+}
+
 #results {
   padding: 10px;
   background: rgba(0, 0, 0, 0.3);
@@ -202,6 +211,10 @@ input {
 
 #results:empty {
   display: none;
+}
+
+#chart:empty {
+  display:none;
 }
 
 #content > img {
