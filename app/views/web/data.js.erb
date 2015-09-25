@@ -1,4 +1,12 @@
-$("#flash").html("<%= j render 'flash_messages' %>");
+$("#flash").html("<%= j render 'flash_messages' %>")
+checkError();
+
+function checkError(){
+  var newError = <%= @error %>;
+  if(newError){
+    $("#content").remove();
+  }
+}
 
 function displayJs(node) {
   if (node) {
@@ -35,7 +43,7 @@ function respondify(){
 };
 
 function displayForm(){
-  if($("#chart").html.length > 0){
+  if($("svg g path").length > 0){
     $("#form-ul").html("<%= j render 'form' %>");
     $("#form-c").remove();
     $(".spinner").remove();
@@ -220,6 +228,6 @@ function displayResults(node) {
   $("#results").html(displayJs(node));
 }
 
-displayForm();
 displayResults(node);
+displayForm();
 respondify();
