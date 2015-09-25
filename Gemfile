@@ -67,3 +67,4 @@ gem 'rspotify'
 gem "d3-rails"
 gem 'json'
 gem 'spinjs-rails'
+gem 'font-awesome-sass', '~> 4.4.0'
