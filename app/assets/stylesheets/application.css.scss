@@ -55,6 +55,11 @@ table {
   width: 100%;
 }
 
+.table-striped>tbody>tr:nth-child(odd)>td,
+.table-striped>tbody>tr:nth-child(odd)>th {
+   background-color: #263645;
+ }
+
 td {
   padding: 10px;
 }
@@ -89,8 +94,8 @@ input {
  margin-top: 5px;
 }
 
-.navbar-inverse {
-  margin-left: -125px;
+.navbar-fixed-bottom {
+  background: #263645 !important;
 }
 
 #chart {
