@@ -1,0 +1,15 @@
+<% content_for :welcome_header do %>
+ <div class="welcome-header">
+   <%= render 'layouts/welcome_header' %>
+ </div>
+<% end %>
+ <div class="jumbotron center">
+   <font color="#9ECAE1"><h1 class="fa fa-heart"> + </h1></font>
+   <font color="#9ECAE1"><h1 class="fa fa-music"> + </h1></font>
+   <font color="#9ECAE1"><h1 class="fa fa-spotify"> </h1></font>
+   <div>
+     <p>Four junior programmers who love music decided to practice app development by building a better way to discover related artists on Spotify. Conceived by Nikila Saravanan. Made with Love in New York by Nikila Saravanan, Gabi O'Connor, David Rowe and Rolando Brown.</p>
+     <p>We're open to new collaborators. Fork this, built in features, submit a pull request.</p>
+     <a type="button" class="btn btn-primary btn-lg hvr-ripple-out" id="welcome-button" src=<%= link_to  "Github", "https://github.com/nikila-saravanan/charlotte" %></a>
+    </div>
+ </div>

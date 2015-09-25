@@ -9,6 +9,9 @@ class WebController < ApplicationController
     end
   end
 
+  def about
+  end
+
   def show
   end
 

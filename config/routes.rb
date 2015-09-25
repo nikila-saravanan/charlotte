@@ -7,6 +7,7 @@ Rails.application.routes.draw do
   get 'web', to: 'web#index'
   get 'web/data', :defaults => { :format => 'js' }
   get 'web/show', to: 'web#show'
+  get 'web/about', to: 'web#about'
 
   devise_for :users
   resources :genres
