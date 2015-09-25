@@ -83,7 +83,7 @@ var responsivefy = function (svg) {
 
     // add viewBox and preserveAspectRatio properties,
     // and call resize so that svg resizes on inital page load
-    svg.attr("viewBox", "0 0 760 550")
+    svg.attr("viewBox", "0 0 760 500")
         .attr("perserveAspectRatio", "xMinYMid")
         .call(resize);
 
@@ -107,7 +107,7 @@ var svg = d3.select("#chart").append("svg")
     .attr("height", height)
     .call(responsivefy)
   .append("g")
-    .attr("transform", "translate(" + width / 2 + "," + (height / 2 + 10) + ")")
+    .attr("transform", "translate(" + width / 2 + "," + (height / 2) + ")")
     .call(tip);
 
 var childFollowers = function(d){
@@ -222,3 +222,4 @@ function displayResults(node) {
 
 displayForm();
 displayResults(node);
+respondify();
