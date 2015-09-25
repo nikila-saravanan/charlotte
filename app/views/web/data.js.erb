@@ -110,6 +110,14 @@ var svg = d3.select("#chart").append("svg")
     .attr("transform", "translate(" + width / 2 + "," + (height / 2 + 10) + ")")
     .call(tip);
 
+var childFollowers = function(d){
+  var sum = 0
+  d.parent.children.forEach(function(child){
+    sum = sum + child.followers.total
+  });
+  return sum
+};
+
 var partition = d3.layout.partition()
     .sort(function descending(a, b) {
       return b.followers.total < a.followers.total
@@ -121,7 +129,7 @@ var partition = d3.layout.partition()
                   : NaN;
     })
     .value(function(d) {
-      return d.parent.followers.total/Math.max(1, d.parent.children.length); });
+      return d.parent.followers.total * (d.followers.total/childFollowers(d)); });
 
 var arc = d3.svg.arc()
     .startAngle(function(d) { return Math.max(0, Math.min(2 * Math.PI, x(d.x))); })
