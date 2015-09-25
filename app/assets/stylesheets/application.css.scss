@@ -45,6 +45,7 @@ body {
 
 a:hover {
   color: white;
+  text-decoration: none;
 }
 
 a {
@@ -123,7 +124,13 @@ input {
 .jumbotron {
   background: none !important;
   text-align: center;
-  padding-top: 12%;
+  padding-top: 10%;
+}
+
+.jumbotron > #about {
+  width: 60%;
+  text-align: left;
+  padding: 1%;
 }
 
 .jumbotron > #form-c {
