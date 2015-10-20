@@ -31,7 +31,6 @@ class WebController < ApplicationController
         flash.now[:error] = "Sorry, we couldn't find that artist. Please try again."
       end
     else
-      @related_artists = @artist.related_artists.sort_by {|artist| artist.followers["total"]}.reverse
       children_artists = @artist.related_artists
 
       grandchildren_artists = children_artists.map do |child_artist|
