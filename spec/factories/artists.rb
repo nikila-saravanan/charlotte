@@ -1,9 +1,8 @@
 FactoryGirl.define do
-  factory :artist do
-    name "MyString"
-url "MyString"
-followers 1
-user nil
+  factory :artist do |f|
+    f.name { Faker::Name.name }
+    f.url { Faker::Internet.url }
+    f.followers { Faker::Number.number }
+    f.user { Faker::Number.number }
   end
-
 end

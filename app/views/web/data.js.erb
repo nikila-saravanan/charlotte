@@ -79,7 +79,7 @@ var tip = d3.tip()
 })
 
 // remove previous chart to avoid duplication
-d3.select("#chart").selectAll("svg").remove();
+d3.select("body").selectAll("svg").remove();
 
 // make responsive
 var responsivefy = function (svg) {
@@ -115,7 +115,7 @@ var svg = d3.select("#chart").append("svg")
     .attr("height", height)
     .call(responsivefy)
   .append("g")
-    .attr("transform", "translate(" + width / 2 + "," + (height / 2) + ")")
+    .attr("transform", "translate(" + width / 2 + "," + (height / 2 + 10) + ")")
     .call(tip);
 
 var childFollowers = function(d){

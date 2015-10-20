@@ -17,3 +17,11 @@ RSpec.describe WebController, type: :controller do
   end
 
 end
+
+#capybara
+#user_attributes
+#attributres
+#user_created
+#user_deleted
+#raise_error
+#weird_names
