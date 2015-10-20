@@ -52,6 +52,7 @@ group :test, :development do
   gem 'pry'
   gem 'guard-rspec', require: false
   gem 'thin'
+  gem 'faker'
 end
 
 group :production do
@@ -66,5 +67,4 @@ gem 'airbrake'
 gem 'rspotify'
 gem "d3-rails"
 gem 'json'
-gem 'spinjs-rails'
 gem 'font-awesome-sass', '~> 4.4.0'

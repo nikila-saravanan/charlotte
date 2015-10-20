@@ -12,7 +12,6 @@
 //
 //= require jquery
 //= require jquery_ujs
-//= require spin
 //= require jquery.spin
 //= require d3
 //= require bootstrap
